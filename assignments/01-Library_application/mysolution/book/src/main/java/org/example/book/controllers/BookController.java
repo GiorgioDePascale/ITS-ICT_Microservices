@@ -1,38 +1,72 @@
 package org.example.book.controllers;
 
-import org.example.book.models.User;
-import org.example.book.repos.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.example.book.models.Book;
+import org.example.book.repos.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/v2/prova")
+@Slf4j
+@RequestMapping("/v2/books")
 public class BookController {
 
     @Autowired
-    private UserRepository userRepository;
+    private BookRepository bookRepository;
 
-    @RequestMapping(value = "/hello/{name}", method = RequestMethod.GET)
-    public String sayHello(@PathVariable String name){
-        return "Hello " + name;
-    }
-
+    //set book
     @RequestMapping(method = RequestMethod.PUT)
-    public void setUser(@RequestBody User user){
-        userRepository.save(user);
-        System.out.println(user);
+    public void setBook(@RequestBody Book book){
+        bookRepository.save(book);
+        System.out.println(book);
     }
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public User getUser(@PathVariable String userId){
-        Optional<User> userOpt = userRepository.findById(userId);
-        if(userOpt.isPresent()){
-            return userOpt.get();
+    //get all
+    @RequestMapping(method = RequestMethod.GET)
+    public Collection<Book> getAllBooks() {
+        log.info("Get BOOK");
+        return bookRepository.findAll();
+    }
+
+
+    //get book
+    @RequestMapping(value = "/{bookId}", method = RequestMethod.GET)
+    public Book getBook(@PathVariable long bookId){
+        Optional<Book> bookOpt = bookRepository.findById(bookId);
+        if(bookOpt.isPresent()){
+            log.info("Get book BY id");
+            return bookOpt.get();
+            //log.info("ok");
         }else{
+            log.error("book not found");
             return null;
         }
+    }
+
+    //edit book
+    @RequestMapping(value = "/{bookId}", method = RequestMethod.POST)
+    public Book editBook(@RequestBody Book book, @PathVariable long bookId){
+        log.info("book saved");
+        return bookRepository.save(book);
+    }
+
+    //delete by ID
+    @RequestMapping(value = "/{bookId}", method = RequestMethod.DELETE)
+    public void deleteBook(@PathVariable long bookId){
+        log.info("deliting " + bookId);
+        bookRepository.deleteById(bookId);
+        log.info("Book deleted");
+    }
+
+    //delete all book
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteAllBook() {
+        log.info("delinting");
+        bookRepository.deleteAll();
+        log.info("deleted all book");
     }
 
 }
