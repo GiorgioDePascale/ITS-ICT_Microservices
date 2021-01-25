@@ -1,2 +1,11 @@
-package org.example.notifications.services;public class NotificationApplication {
+package org.example.notifications.services;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class NotificationApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(NotificationApplication.class, args);
+    }
 }

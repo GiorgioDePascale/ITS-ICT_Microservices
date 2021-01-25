@@ -25,12 +25,12 @@ services:
       - mongodb_data:/data/db
 
   #
-  # Order Microservice
+  # Borrow Microservice
   #
-  order-ms:
+  borrow-ms:
     build:
-      context: ./order
-    container_name: order-ms
+      context: ./borrow
+    container_name: borrow-ms
     ports:
       - "8103:8103"
     depends_on:
