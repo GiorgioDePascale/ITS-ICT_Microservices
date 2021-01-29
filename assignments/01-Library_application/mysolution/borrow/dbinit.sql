@@ -1,4 +1,4 @@
-CREATE DATABASE "borrowing" OWNER postgres;
+CREATE DATABASE "borrow" OWNER postgres;
 \connect borrow
 ALTER DATABASE "borrow" SET TIMEZONE TO 'Europe/Rome';
 SET TIMEZONE TO 'Europe/Rome';
