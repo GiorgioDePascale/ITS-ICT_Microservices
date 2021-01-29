@@ -2,64 +2,70 @@ package org.example.customer.controllers;
 
 import org.example.customer.models.Customer;
 import org.example.customer.repos.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
+
 @RestController
+@Slf4j
 @RequestMapping(value = "/v2/customers")
 public class CustomerController {
 
     @Autowired
-    private final CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
-    public CustomerController(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
-
-    // CREATE
-    @RequestMapping(method = RequestMethod.PUT)
-    public Customer addNewCustomer(@Valid @RequestBody Customer customer) {
-        return customerRepository.save(customer);
-    }
-
-
-    // READ
+    //get
     @RequestMapping(value = "/{customerId}", method = RequestMethod.GET)
-    public Customer getCustomer(@PathVariable String customerId) {
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        if(customerOptional.isPresent()){
-            return customerOptional.get();
+    public Customer getCustomer(@PathVariable String customerId){
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
+        if(customerOpt.isPresent()){
+            log.info("Get customer");
+            return customerOpt.get();
         }else{
+            log.warn("Customer not found");
             return null;
         }
     }
 
+    //get all
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Customer> getAllCustomers() {
+    public Collection<Customer> getAllCustomer() {
+        log.info("Get all customer");
         return customerRepository.findAll();
     }
 
+    //set customer
+    @RequestMapping(method = RequestMethod.PUT)
+    public void setCustomer(@RequestBody Customer customer){
+        customerRepository.save(customer);//save
+        System.out.println(customer);
+        log.info("Save customer");
+    }
 
-    // UPDATE
+    //edit customer
     @RequestMapping(value = "/{customerId}", method = RequestMethod.POST)
-    public Customer modifyCustomer(@RequestBody Customer customer, @RequestBody String customerId ) {
+    public Customer editCustomer(@RequestBody Customer customer, @PathVariable Long customerId){
+        log.info("Edit customer");
         return customerRepository.save(customer);
     }
 
+    //delete customer by ID
+    @RequestMapping(value = "/{customerId}", method = RequestMethod.DELETE)
+    public void deleteCustomerByID(@PathVariable String customerId){
+        customerRepository.deleteById(customerId);
+        log.warn("Delete customer");
+    }
 
-    // DELETE
+    //delete all customer
     @RequestMapping(method = RequestMethod.DELETE)
     public void deleteAllCustomers() {
+        log.warn("Delete customer");
         customerRepository.deleteAll();
     }
 
-    @RequestMapping(value = "/{customerId}", method = RequestMethod.DELETE)
-    public void deleteCustomer(@PathVariable String customerId) {
-        customerRepository.deleteById(customerId);
-    }
 }
 
