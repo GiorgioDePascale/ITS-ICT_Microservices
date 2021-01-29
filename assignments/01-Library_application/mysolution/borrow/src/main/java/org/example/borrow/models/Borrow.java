@@ -1,16 +1,20 @@
 package org.example.borrow.models;
-
+import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
+
+@Data
 @Entity
-@Table(name = "borrows")
+@Table(name = "borrowings")
 public class Borrow {
 
     @Id
     private Long borrowId;
-
-    private String customerId;
+    private String startBorrow;
+    private String endBorrow;
+    private Long bookId;
+    private Long customerId;
+    private String notify;
 
 }
