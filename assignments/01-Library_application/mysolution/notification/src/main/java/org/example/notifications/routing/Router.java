@@ -1,10 +1,11 @@
 package org.example.notifications.routing;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-
+@Slf4j
 public class Router extends RouteBuilder {
 
     @Override
@@ -20,5 +21,4 @@ public class Router extends RouteBuilder {
                 .to("log:?level=INFO&showBody=true");
 
     }
-
 }
